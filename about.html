@@ -1,0 +1,377 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Identifikasi</title>
+    <link rel="stylesheet" href="css/style.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+    <nav>
+        <ul>
+            <li><a href="index.html">RealTime</a></li>
+            <li><a href="about.html">Identifikasi</a></li>
+            <li><a href="contact.html">Kontak</a></li>
+        </ul>
+    </nav>
+
+    <div class="container">
+        <header>
+            <h1>Identifikasi Kerusakan Mesin</h1>
+        </header>
+
+        <section id="about">
+            <p>Presentase kerusakan mesin yang terjadi pada MOTOR 01</p>
+
+            <!-- Tambahkan div untuk memilih tanggal dan waktu -->
+            <div class="date-time-picker">
+                <label for="dateInput">Pilih Tanggal:</label>
+                <input type="date" id="dateInput">
+
+                <label for="timeInput">Pilih Jam:</label>
+                <input type="time" id="timeInput">
+
+                <!-- Tombol untuk memilih tanggal dan waktu -->
+                <button id="selectDateTimeBtn" class="select-date-time-btn">Pilih Tanggal dan Waktu</button>
+            </div>
+
+            <!-- Tambahkan tombol Analyze di bawah pemilih tanggal dan waktu -->
+            <button id="analyzeBtn" class="analyze-btn">Analyze</button>
+
+            <!-- Tambahkan div untuk grafik FFT -->
+            <div class="graph-container">
+                <!-- Grafik FFT X -->
+                <div>
+                    <h2>FFT X</h2>
+                    <canvas id="fftChart1"></canvas>
+                </div>
+
+                <!-- Grafik FFT Y -->
+                <div>
+                    <h2>FFT Y</h2>
+                    <canvas id="fftChart2"></canvas>
+                </div>
+
+                <!-- Grafik FFT Z -->
+                <div>
+                    <h2>FFT Z</h2>
+                    <canvas id="fftChart3"></canvas>
+                </div>
+            </div>
+
+            <!-- Tambahkan div untuk grafik Domain Waktu -->
+            <div class="graph-container">
+                <!-- Grafik Domain Waktu X -->
+                <div>
+                    <h2>Domain Waktu X</h2>
+                    <canvas id="timeDomainChart1"></canvas>
+                </div>
+
+                <!-- Grafik Domain Waktu Y -->
+                <div>
+                    <h2>Domain Waktu Y</h2>
+                    <canvas id="timeDomainChart2"></canvas>
+                </div>
+
+                <!-- Grafik Domain Waktu Z -->
+                <div>
+                    <h2>Domain Waktu Z</h2>
+                    <canvas id="timeDomainChart3"></canvas>
+                </div>
+            </div>
+
+            <!-- Tambahkan div untuk indikator RPM di kanan -->
+            <div class="rpm-container">
+                <!-- Grafik RPM -->
+                <div>
+                    <h2>Indikator RPM</h2>
+                    <canvas id="rpmChart"></canvas>
+                    <!-- Tambahkan elemen untuk menampilkan nilai RPM -->
+                    <p id="rpmValue" class="rpm-value">RPM: 2542</p>
+                </div>
+            </div>
+
+            <!-- Tambahkan div untuk lingkaran indikator kerusakan -->
+            <div class="circle-container">
+                <!-- Circle 1 -->
+                <div class="circle-item">
+                    <div class="circle">
+                        99
+                    </div>
+                    <div class="circle-title">Normal</div>
+                </div>
+
+                <!-- Circle 2 -->
+                <div class="circle-item">
+                    <div class="circle">
+                        0,5
+                    </div>
+                    <div class="circle-title">Misalignment Parallel</div>
+                </div>
+
+                <!-- Circle 3 -->
+                <div class="circle-item">
+                    <div class="circle">
+                        0,3
+                    </div>
+                    <div class="circle-title">Misalignment Angular</div>
+                </div>
+
+                <!-- Circle 4 -->
+                <div class="circle-item">
+                    <div class="circle">
+                        0,2
+                    </div>
+                    <div class="circle-title">Unbalance</div>
+                </div>
+            </div>
+        </section>
+
+        <footer>
+            <p>&copy; Monitoring Vibration | <a href="#about">Kembali ke atas</a></p>
+        </footer>
+    </div>
+
+    <!-- Script untuk membuat grafik -->
+    <script>
+        // Data dummy untuk grafik FFT 1
+        const fftData1 = {
+            labels: ['0Hz', '10Hz', '20Hz', '30Hz', '40Hz', '50Hz', '60Hz'],
+            datasets: [{
+                label: 'Amplitude',
+                data: [0, 10, 30, 40, 35, 25, 20],
+                borderColor: 'rgba(75, 192, 192, 1)',
+                backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                fill: true,
+            }]
+        };
+
+        // Configurasi untuk grafik FFT 1
+        const fftConfig1 = {
+            type: 'line',
+            data: fftData1,
+            options: {
+                scales: {
+                    y: {
+                        beginAtZero: true
+                    }
+                }
+            }
+        };
+
+        // Render grafik FFT 1
+        const fftChart1 = new Chart(
+            document.getElementById('fftChart1'),
+            fftConfig1
+        );
+
+        // Data dummy untuk grafik FFT 2
+        const fftData2 = {
+            labels: ['0Hz', '10Hz', '20Hz', '30Hz', '40Hz', '50Hz', '60Hz'],
+            datasets: [{
+                label: 'Amplitude',
+                data: [5, 15, 25, 35, 30, 20, 15],
+                borderColor: 'rgba(54, 162, 235, 1)',
+                backgroundColor: 'rgba(54, 162, 235, 0.2)',
+                fill: true,
+            }]
+        };
+
+        // Configurasi untuk grafik FFT 2
+        const fftConfig2 = {
+            type: 'line',
+            data: fftData2,
+            options: {
+                scales: {
+                    y: {
+                        beginAtZero: true
+                    }
+                }
+            }
+        };
+
+        // Render grafik FFT 2
+        const fftChart2 = new Chart(
+            document.getElementById('fftChart2'),
+            fftConfig2
+        );
+
+        // Data dummy untuk grafik FFT 3
+        const fftData3 = {
+            labels: ['0Hz', '10Hz', '20Hz', '30Hz', '40Hz', '50Hz', '60Hz'],
+            datasets: [{
+                label: 'Amplitude',
+                data: [10, 20, 30, 20, 25, 30, 35],
+                borderColor: 'rgba(255, 99, 132, 1)',
+                backgroundColor: 'rgba(255, 99, 132, 0.2)',
+                fill: true,
+            }]
+        };
+
+        // Configurasi untuk grafik FFT 3
+        const fftConfig3 = {
+            type: 'line',
+            data: fftData3,
+            options: {
+                scales: {
+                    y: {
+                        beginAtZero: true
+                    }
+                }
+            }
+        };
+
+        // Render grafik FFT 3
+        const fftChart3 = new Chart(
+            document.getElementById('fftChart3'),
+            fftConfig3
+        );
+
+        // Data dummy untuk grafik Domain Waktu 1
+        const timeDomainData1 = {
+            labels: ['0s', '1s', '2s', '3s', '4s', '5s'],
+            datasets: [{
+                label: 'Amplitude',
+                data: [0, 20, 15, 30, 25, 40],
+                borderColor: 'rgba(153, 102, 255, 1)',
+                backgroundColor: 'rgba(153, 102, 255, 0.2)',
+                fill: true,
+            }]
+        };
+
+        // Configurasi untuk grafik Domain Waktu 1
+        const timeDomainConfig1 = {
+            type: 'line',
+            data: timeDomainData1,
+            options: {
+                scales: {
+                    y: {
+                        beginAtZero: true
+                    }
+                }
+            }
+        };
+
+        // Render grafik Domain Waktu 1
+        const timeDomainChart1 = new Chart(
+            document.getElementById('timeDomainChart1'),
+            timeDomainConfig1
+        );
+
+        // Data dummy untuk grafik Domain Waktu 2
+        const timeDomainData2 = {
+            labels: ['0s', '1s', '2s', '3s', '4s', '5s'],
+            datasets: [{
+                label: 'Amplitude',
+                data: [0, 15, 10, 35, 20, 45],
+                borderColor: 'rgba(255, 159, 64, 1)',
+                backgroundColor: 'rgba(255, 159, 64, 0.2)',
+                fill: true,
+            }]
+        };
+
+        // Configurasi untuk grafik Domain Waktu 2
+        const timeDomainConfig2 = {
+            type: 'line',
+            data: timeDomainData2,
+            options: {
+                scales: {
+                    y: {
+                        beginAtZero: true
+                    }
+                }
+            }
+        };
+
+        // Render grafik Domain Waktu 2
+        const timeDomainChart2 = new Chart(
+            document.getElementById('timeDomainChart2'),
+            timeDomainConfig2
+        );
+
+        // Data dummy untuk grafik Domain Waktu 3
+        const timeDomainData3 = {
+            labels: ['0s', '1s', '2s', '3s', '4s', '5s'],
+            datasets: [{
+                label: 'Amplitude',
+                data: [5, 25, 20, 30, 15, 40],
+                borderColor: 'rgba(75, 192, 192, 1)',
+                backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                fill: true,
+            }]
+        };
+
+        // Configurasi untuk grafik Domain Waktu 3
+        const timeDomainConfig3 = {
+            type: 'line',
+            data: timeDomainData3,
+            options: {
+                scales: {
+                    y: {
+                        beginAtZero: true
+                    }
+                }
+            }
+        };
+
+        // Render grafik Domain Waktu 3
+        const timeDomainChart3 = new Chart(
+            document.getElementById('timeDomainChart3'),
+            timeDomainConfig3
+        );
+
+        // Data dummy untuk indikator RPM
+        const rpmData = {
+            datasets: [{
+                data: [2542], // RPM value
+                backgroundColor: ['rgba(255, 159, 64, 0.2)'],
+                borderColor: ['rgba(255, 159, 64, 1)'],
+                borderWidth: 1
+            }]
+        };
+
+        // Configurasi untuk grafik RPM
+        const rpmConfig = {
+            type: 'doughnut',
+            data: rpmData,
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: {
+                        display: false
+                    },
+                    tooltip: {
+                        callbacks: {
+                            label: function(tooltipItem) {
+                                return tooltipItem.raw + ' RPM';
+                            }
+                        }
+                    }
+                }
+            }
+        };
+
+        // Render grafik RPM
+        const rpmChart = new Chart(
+            document.getElementById('rpmChart'),
+            rpmConfig
+        );
+
+        // Fungsi untuk menangani klik tombol Analyze
+        document.getElementById('analyzeBtn').addEventListener('click', function() {
+            alert('Analyze button clicked!');
+            // Tambahkan logika analisis di sini
+        });
+
+        // Fungsi untuk menangani klik tombol Pilih Tanggal dan Waktu
+        document.getElementById('selectDateTimeBtn').addEventListener('click', function() {
+            const date = document.getElementById('dateInput').value;
+            const time = document.getElementById('timeInput').value;
+
+            alert(`Tanggal: ${date}\nJam: ${time}`);
+            // Tambahkan logika pemrosesan tanggal dan waktu di sini
+        });
+    </script>
+</body>
+</html>

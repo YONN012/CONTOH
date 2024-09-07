@@ -1,0 +1,246 @@
+/* Reset default styles */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Arial', sans-serif;
+    line-height: 1.6;
+    background-color: #f4f4f4;
+    color: #333;
+    display: flex;
+    min-height: 100vh;
+}
+
+nav {
+    width: 250px; /* Lebar sidebar */
+    background-color: #007BFF;
+    padding: 20px;
+    position: fixed;
+    height: 100%;
+}
+
+nav ul {
+    list-style: none;
+    padding: 0;
+}
+
+nav ul li {
+    margin-bottom: 20px;
+}
+
+nav ul li a {
+    text-decoration: none;
+    color: white;
+    font-weight: bold;
+    display: block;
+    padding: 10px;
+    border-radius: 5px;
+    transition: background-color 0.3s;
+}
+
+nav ul li a:hover {
+    background-color: #0056b3;
+}
+
+.container {
+    flex-grow: 1; /* Memperluas konten hingga memenuhi lebar layar penuh */
+    margin-left: 250px; /* Disesuaikan dengan lebar sidebar */
+    padding: 40px;
+    background-color: white;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    min-height: 100vh; /* Pastikan konten selalu minimal setinggi layar */
+}
+
+header {
+    text-align: center;
+    margin-bottom: 50px;
+}
+
+header h1 {
+    font-size: 2.5rem;
+    color: #333;
+}
+
+section {
+    text-align: center;
+}
+
+section h2 {
+    font-size: 2rem;
+    margin-bottom: 20px;
+}
+
+section p {
+    font-size: 1.2rem;
+    line-height: 1.8;
+    max-width: 100%; /* Memenuhi seluruh lebar layar */
+    margin: 0 auto;
+}
+
+footer {
+    text-align: center;
+    margin-top: 50px;
+    padding: 20px;
+    background-color: #007BFF;
+    color: white;
+    position: relative;
+    bottom: 0;
+    width: 100%; /* Memenuhi lebar layar */
+}
+
+footer p {
+    margin-bottom: 0;
+}
+
+footer a {
+    color: white;
+    text-decoration: underline;
+}
+
+.circle-container {
+    display: flex;
+    justify-content: space-around;
+    margin-top: 30px;
+}
+
+.circle-item {
+    text-align: center; /* Menempatkan lingkaran dan keterangan di tengah */
+}
+
+.circle {
+    width: 150px;
+    height: 150px;
+    border-radius: 50%;
+    background-color: #007BFF;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-size: 24px;
+    font-weight: bold;
+    margin-bottom: 10px; /* Jarak antara lingkaran dan keterangan */
+    position: relative;
+}
+
+.circle-title {
+    font-size: 16px;
+    color: #333;
+}
+
+.circle::after {
+    content: '%';
+    position: absolute;
+    font-size: 14px;
+    bottom: 10px;
+}
+
+/* Tambahkan styling untuk grafik */
+.graph-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 20px; /* Jarak antar grafik */
+    margin-top: 30px;
+}
+
+.canvas-container {
+    display: flex;
+    flex-direction: row;
+    gap: 20px;
+    justify-content: flex-end; /* Menempatkan grafik di sebelah kanan */
+    margin-top: 30px; /* Jarak dari atas */
+}
+
+/* Styling tambahan untuk indikator RPM */
+.rpm-container {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end; /* Mengatur posisi ke kanan */
+    margin-top: -296px; /* Pindahkan indikator RPM sedikit ke atas (3 cm) */
+    position: relative;
+}
+
+.rpm-value {
+    position: absolute;
+    top: 60%; /* Menempatkan nilai di tengah-tengah lingkaran */
+    left: 90%;
+    transform: translate(-50%, -50%); /* Mengatur posisi nilai di tengah */
+    font-size: 20px;
+    font-weight: bold;
+    color: rgba(255, 159, 64, 1); /* Warna teks sesuai dengan warna grafik */
+}
+
+canvas {
+    width: 100% !important; /* Memastikan grafik mengisi lebar kontainer */
+    height: 300px; /* Mengatur tinggi grafik */
+}
+
+@media (max-width: 768px) {
+    .graph-container, .canvas-container {
+        grid-template-columns: 1fr; /* Tampilan satu kolom untuk layar kecil */
+        flex-direction: column; /* Susun grafik secara vertikal pada layar kecil */
+    }
+
+    .rpm-container {
+        margin-top: 0; /* Reset margin pada layar kecil */
+    }
+}
+
+/* Styling untuk tombol Analyze */
+.analyze-btn {
+    background-color: #4CAF50; /* Warna latar belakang hijau */
+    color: white; /* Warna teks putih */
+    border: none;
+    padding: 10px 20px; /* Padding dalam tombol */
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    margin: 10px 0;
+    cursor: pointer;
+    border-radius: 5px; /* Sudut tombol melengkung */
+}
+
+.analyze-btn:hover {
+    background-color: #45a049; /* Warna latar belakang tombol saat hover */
+}
+
+/* Styling untuk tombol Pilih Tanggal dan Waktu */
+.select-date-time-btn {
+    background-color: #2196F3; /* Warna latar belakang biru */
+    color: white; /* Warna teks putih */
+    border: none;
+    padding: 10px 20px; /* Padding dalam tombol */
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    margin: 10px 0;
+    cursor: pointer;
+    border-radius: 5px; /* Sudut tombol melengkung */
+}
+
+.select-date-time-btn:hover {
+    background-color: #0b79d0; /* Warna latar belakang tombol saat hover */
+}
+
+/* Styling untuk pemilih tanggal dan waktu */
+.date-time-picker {
+    margin: 20px 0;
+}
+
+.date-time-picker label {
+    display: block;
+    margin: 5px 0;
+}
+
+.date-time-picker input {
+    margin-bottom: 10px;
+    padding: 5px;
+    font-size: 16px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
